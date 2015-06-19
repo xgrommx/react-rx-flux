@@ -4,12 +4,14 @@ import Actions from './actions';
 
 const {when, fromPromise, fromEvent} = Rx.Observable;
 
-Rx.Observable.update = function (initial, ...patterns) {
-    const observables = this.from(patterns).partition((_, i) => i % 2 === 0);
+Rx.Observable.update = function () {
+    const args = [].slice.call(arguments);
 
-    return observables[0]
-        .zip(observables[1], (stream, callback) => ({stream, callback}))
-        .toArray()
+    return this.zip.apply(this,
+        Rx.Observable.from(args.slice(1))
+            .partition((_, i) => i % 2 === 0)
+            .concat([(stream, callback) => ({stream, callback})])
+    ).toArray()
         .flatMap(pairs =>
             Rx.Observable.when.apply(
                 Rx.Observable,
@@ -17,7 +19,7 @@ Rx.Observable.update = function (initial, ...patterns) {
                     (Array.isArray(p.stream) ? p.stream.reduce((prev, next) => prev.and(next)) : p.stream).thenDo(function (args) {
                         return (prev) => p.callback.apply(p.callback, [prev].concat([].slice.call(arguments)));
                     })))
-                .startWith(initial)
+                .startWith(args[0])
                 .scan((prev, f) => f(prev)))
 };
 
