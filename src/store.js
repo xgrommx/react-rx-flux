@@ -7,25 +7,18 @@ const {when, fromPromise, fromEvent} = Rx.Observable;
 Rx.Observable.update = function (initial, ...patterns) {
     const observables = this.from(patterns).partition((_, i) => i % 2 === 0);
 
-    const cb = function () {
-        var args = [].slice.call(arguments);
-        return (prev) => this.apply(this, [prev].concat(args));
-    };
-
     return observables[0]
-        .zip(observables[1], (stream, callback) => ({stream, callback})).toArray().flatMap(pairs =>
-            Rx.Observable.when.apply(Rx.Observable, pairs.map(p => {
-                if (Array.isArray(p.stream)) {
-                    var obs = p.stream[0];
-                    for (var i = 1; i < p.stream.length; i++) {
-                        obs = obs.and(p.stream[i]);
-                    }
-                    return obs.thenDo(cb.bind(p.callback));
-                } else {
-                    return p.stream.thenDo(cb.bind(p.callback));
-                }
-            })).startWith(initial).scan((prev, f) => f(prev))
-    )
+        .zip(observables[1], (stream, callback) => ({stream, callback}))
+        .toArray()
+        .flatMap(pairs =>
+            Rx.Observable.when.apply(
+                Rx.Observable,
+                pairs.map(p =>
+                    (Array.isArray(p.stream) ? p.stream.reduce((prev, next) => prev.and(next)) : p.stream).thenDo(function (args) {
+                        return (prev) => p.callback.apply(p.callback, [prev].concat([].slice.call(arguments)));
+                    })))
+                .startWith(initial)
+                .scan((prev, f) => f(prev)))
 };
 
 let defaultPerson = {
