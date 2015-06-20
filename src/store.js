@@ -19,8 +19,9 @@ Rx.Observable.update = function () {
                     (Array.isArray(p.stream) ? p.stream.reduce((prev, next) => prev.and(next)) : p.stream).thenDo(function (args) {
                         return (prev) => p.callback.apply(p.callback, [prev].concat([].slice.call(arguments)));
                     })))
-                .startWith(args[0])
-                .scan((prev, f) => f(prev)))
+                )
+        .startWith(args[0])
+        .scan((prev, f) => f(prev))
 };
 
 let defaultPerson = {
