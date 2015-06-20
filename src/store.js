@@ -33,7 +33,7 @@ let defaultPerson = {
 };
 
 const emulateAjaxWithDelay = (key) => new Promise(resolve =>
-        setTimeout(() => resolve(Promise.resolve(fromJS(JSON.parse(localStorage.getItem(key)) || defaultPerson))), 2000)
+        setTimeout(() => resolve(Promise.resolve(fromJS(JSON.parse(localStorage.getItem(key)) || defaultPerson))), 1000)
 );
 
 const saveToLocalStorage = (key, value) => {
@@ -44,8 +44,7 @@ const saveToLocalStorage = (key, value) => {
 
 export default (key) =>
     fromPromise(emulateAjaxWithDelay(key))
-        .merge(fromEvent(window, 'storage')
-            .map(({newValue}) => fromJS(JSON.parse(newValue))))
+        .merge(fromEvent(window, 'storage').map(({newValue}) => fromJS(JSON.parse(newValue))))
         .flatMap(p => Rx.Observable.update(p,
             Actions.changeFirstName, (person, firstName) => person.set('firstName', firstName),
             Actions.changeLastName, (person, lastName) => person.set('lastName', lastName),
