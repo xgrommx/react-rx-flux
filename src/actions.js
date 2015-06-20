@@ -6,5 +6,7 @@ export default {
     changeCountry: new Subject(),
     addFriend: new Subject(),
     removeFriend: new Subject(),
-    save: new Subject()
+    save: new Subject(),
+    undo: new Subject(),
+    redo: new Subject()
 }

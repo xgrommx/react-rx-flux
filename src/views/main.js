@@ -1,5 +1,5 @@
 import {CompositeDisposable} from 'rx';
-import {Map} from 'immutable';
+import I, {Map, List} from 'immutable';
 import React, {Component} from 'react';
 import R from 'ramda';
 import Loader from 'react-loader';
@@ -11,7 +11,9 @@ export default class extends Component {
     state = {
         person: {},
         friend: "",
-        loaded: false
+        loaded: false,
+        history: List(),
+        future: List()
     };
 
     constructor(props) {
@@ -35,13 +37,43 @@ export default class extends Component {
 
     onSave = (e) => {
         e.preventDefault();
-        this.setState({loaded: true});
+        this.setState({
+            loaded: true,
+            history: new List(),
+            future: new List()
+        });
         Actions.save.onNext();
+    };
+
+    undo = (e) => {
+        e.preventDefault();
+        if (this.state.history.size < 1) return;
+        this.setState({
+            history: this.state.history.pop(),
+            future: this.state.future.push(this.state.person)
+        });
+        Actions.undo.onNext(this.state.history.last());
+    };
+
+    redo = (e) => {
+        e.preventDefault();
+        if (this.state.future.size < 1) return;
+        this.setState({
+            history: this.state.history.push(this.state.person),
+            future: this.state.future.pop()
+        });
+        Actions.redo.onNext(this.state.future.last());
     };
 
     handleChange = (e) => {
         let name = e.target.name;
         let val = e.target.value;
+
+        if(name !== 'friend') {
+            this.setState({
+                history: this.state.history.push(this.state.person)
+            });
+        }
 
         switch(name) {
             case 'firstName':
@@ -55,15 +87,25 @@ export default class extends Component {
                 break;
             case 'friend':
                 this.setState({friend: val});
+                break;
         }
     };
 
     addFriend = () => {
+        this.setState({
+            history: this.state.history.push(this.state.person)
+        });
+
         Actions.addFriend.onNext(this.state.friend);
         this.setState({friend: ""});
     };
 
-    removeFriend = (friendIndex) => Actions.removeFriend.onNext(friendIndex);
+    removeFriend = (friendIndex) => {
+        this.setState({
+            history: this.state.history.push(this.state.person)
+        });
+        Actions.removeFriend.onNext(friendIndex)
+    };
 
     render() {
         if(!this.state.person || !(this.state.person instanceof Map) || this.state.loaded) {
@@ -122,12 +164,22 @@ export default class extends Component {
                 <div className="col-md-9 col-xs-9">
                     <form className="form-horizontal">
                         <div className="form-group">
+                            <div className="col-md-offset-3 col-xs-offset-3 col-md-9 col-xs-9">
+                                <div className="pull-left">
+                                    <button disabled={this.state.history.size < 1} className="btn btn-success btn-block" onClick={this.undo}>Undo</button>
+                                </div>
+                                <div className="pull-right">
+                                    <button disabled={this.state.future.size < 1} className="btn btn-success btn-block" onClick={this.redo}>Redo</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="form-group">
                             <label className="col-md-3 col-xs-3 control-label">First Name:</label>
                             <div className="col-md-9 col-xs-9">
                                 <input type="text"
                                        onChange={this.handleChange}
                                        name="firstName"
-                                       defaultValue={this.state.person.get('firstName')}
+                                       value={this.state.person.get('firstName')}
                                        className="form-control" placeholder="First Name" />
                             </div>
                         </div>
@@ -137,7 +189,7 @@ export default class extends Component {
                                 <input type="text"
                                        onChange={this.handleChange}
                                        name="lastName"
-                                       defaultValue={this.state.person.get('lastName')}
+                                       value={this.state.person.get('lastName')}
                                        className="form-control" placeholder="Last Name" />
                             </div>
                         </div>
@@ -147,7 +199,7 @@ export default class extends Component {
                                 <input type="text"
                                        onChange={this.handleChange}
                                        name="countryName"
-                                       defaultValue={this.state.person.get('country').get('name')}
+                                       value={this.state.person.get('country').get('name')}
                                        className="form-control" placeholder="Country" />
                             </div>
                         </div>
