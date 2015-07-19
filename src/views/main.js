@@ -18,9 +18,6 @@ export default class extends Component {
 
     constructor(props) {
         super(props);
-    }
-
-    componentWillMount() {
         this.loadData();
     }
 
@@ -66,8 +63,7 @@ export default class extends Component {
     };
 
     handleChange = (e) => {
-        let name = e.target.name;
-        let val = e.target.value;
+        let {name, value}= e.target;
 
         if(name !== 'friend') {
             this.setState({
@@ -77,16 +73,16 @@ export default class extends Component {
 
         switch(name) {
             case 'firstName':
-                Actions.changeFirstName.onNext(val);
+                Actions.changeFirstName.onNext(value);
                 break;
             case 'lastName':
-                Actions.changeLastName.onNext(val);
+                Actions.changeLastName.onNext(value);
                 break;
             case 'countryName':
-                Actions.changeCountry.onNext(val);
+                Actions.changeCountry.onNext(value);
                 break;
             case 'friend':
-                this.setState({friend: val});
+                this.setState({friend: value});
                 break;
         }
     };
@@ -128,9 +124,7 @@ export default class extends Component {
                 scale: 1.00
             };
 
-            return (<div style={{marginTop: '40px'}} className="container">
-                <Loader options={options} />
-            </div>);
+            return <div className="row"><Loader options={options} /></div>;
         } else {
             let friendsView = (friends) => {
                 if(friends.length > 0) {
@@ -140,12 +134,12 @@ export default class extends Component {
                         </div>
                         <ul className="list-group">
                             {
-                                friends.map(function(friend, i) {
-                                    return <li className="list-group-item" key={i}>
+                                friends.map((friend, i) =>
+                                    <li className="list-group-item" key={i}>
                                         <span>{friend}</span>
                                         <button type="button" className="close pull-right" aria-label="Close" onClick={this.removeFriend.bind(this, i)}><span aria-hidden="true">&times;</span></button>
-                                    </li>;
-                                }.bind(this))
+                                    </li>
+                                )
                             }
                         </ul>
                         <div className="panel-footer clearfix">
@@ -159,9 +153,9 @@ export default class extends Component {
                 }
             };
 
-            return (<div style={{marginTop: '40px'}} className="container">
-                <div className="col-md-3 col-xs-3"><ViewProfile person={this.state.person} /></div>
-                <div className="col-md-9 col-xs-9">
+            return (<div className="row">
+                <div className="col-md-4 col-xs-4"><ViewProfile person={this.state.person} /></div>
+                <div className="col-md-8 col-xs-8">
                     <form className="form-horizontal">
                         <div className="form-group">
                             <div className="col-md-offset-3 col-xs-offset-3 col-md-9 col-xs-9">
