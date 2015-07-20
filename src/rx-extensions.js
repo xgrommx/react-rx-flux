@@ -1,4 +1,5 @@
 import Rx from 'rx';
+import R from 'ramda';
 
 /**
  *
@@ -20,10 +21,11 @@ export default class RxExtensions extends Rx.Observable {
         ).toArray()
             .flatMapLatest(pairs =>
                 super.when(...pairs.map(p =>
-                    (Array.isArray(p.stream) ? p.stream.reduce((prev, next) => prev.and(next)) : p.stream).thenDo((...args) =>
-                            p.callback(...args)
-                    )))
-        );
+                    ((Array.isArray(p.stream) ? p.stream : [p.stream]).reduce((prev, next) => prev.and(next)))
+                        .thenDo(...args => p.callback(...args))
+                    )
+                )
+        ).publish().refCount();
     }
 
     /**
@@ -39,9 +41,10 @@ export default class RxExtensions extends Rx.Observable {
         ).toArray()
             .flatMapLatest(pairs =>
                 super.when(...pairs.map(p =>
-                    (Array.isArray(p.stream) ? p.stream.reduce((prev, next) => prev.and(next)) : p.stream).thenDo((...args) =>
-                            (prev) => p.callback(...[prev, ...args])
-                    )))
-        ).startWith(initial).scan((prev, f) => f(prev))
+                    ((Array.isArray(p.stream) ? p.stream : [p.stream]).reduce((prev, next) => prev.and(next)))
+                        .thenDo(R.curry(R.flip((prev, ...args) => p.callback(...[prev, ...args]))))
+                    )
+                )
+        ).startWith(initial).scan((prev, f) => f(prev)).publish().refCount();
     }
 }

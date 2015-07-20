@@ -18,6 +18,8 @@
   "dependencies": {
     "falcor": "0.0.0",
     "immutable": "^3.7.3",
+    "lodash": "^3.10.0",
+    "lodash-fp": "^0.10.1",
     "ramda": "^0.14.0",
     "react": "^0.13.3",
     "react-loader": "^1.4.0",

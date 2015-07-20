@@ -1,10 +1,9 @@
 import Rx from 'rx';
-import RxExtensions from './rx-extensions';
+import RxExtensions, {update} from './rx-extensions';
 import I, {fromJS} from 'immutable';
 import Actions from './actions';
 
 const {fromPromise, fromEvent, from} = Rx.Observable;
-const {update} = RxExtensions;
 
 let defaultPerson = {
     firstName: 'Denis',
