@@ -1,7 +1,5 @@
-import {CompositeDisposable} from 'rx';
 import React, {Component} from 'react';
 import {Map} from 'immutable';
-import Store from '../store';
 
 export default class extends Component {
     constructor(props) {

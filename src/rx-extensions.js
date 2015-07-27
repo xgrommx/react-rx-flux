@@ -1,12 +1,12 @@
 import Rx from 'rx';
-import R from 'ramda';
+import curryRight from 'lodash/function/curryRight';
 
 /**
  *
  */
 export default class RxExtensions extends Rx.Observable {
-    constructor() {
-        super(arguments);
+    constructor(...args) {
+        super(args);
     }
 
     /**
@@ -42,7 +42,7 @@ export default class RxExtensions extends Rx.Observable {
             .flatMapLatest(pairs =>
                 super.when(...pairs.map(p =>
                     ((Array.isArray(p.stream) ? p.stream : [p.stream]).reduce((prev, next) => prev.and(next)))
-                        .thenDo(R.curry(R.flip((prev, ...args) => p.callback(...[prev, ...args]))))
+                        .thenDo(curryRight((prev, ...args) => p.callback(...[prev, ...args]), 2))
                     )
                 )
         ).startWith(initial).scan((prev, f) => f(prev)).publish().refCount();
