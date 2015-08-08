@@ -1,7 +1,6 @@
-import {CompositeDisposable} from 'rx';
+import flyd from 'flyd';
 import I, {Map, List} from 'immutable';
 import React, {Component} from 'react';
-import R from 'ramda';
 import Loader from 'react-loader';
 import Actions from '../actions';
 import Store from '../store';
@@ -18,18 +17,19 @@ export default class extends Component {
 
     constructor(props) {
         super(props);
-        this.loadData();
     }
 
-    loadData = () => {
-        this.disposables = new CompositeDisposable();
+    componentWillMount = () => {
+        this.loadData();
+    };
 
-        this.disposables.add(Store('person').subscribe(person =>
+    loadData = () => {
+        flyd.on((person) => {
             this.setState({
                 person,
                 loaded: false
             })
-        ));
+        }, Store('person'));
     };
 
     onSave = (e) => {
@@ -39,7 +39,7 @@ export default class extends Component {
             history: new List(),
             future: new List()
         });
-        Actions.save.onNext();
+        Actions.save();
     };
 
     undo = (e) => {
@@ -49,7 +49,7 @@ export default class extends Component {
             history: this.state.history.pop(),
             future: this.state.future.push(this.state.person)
         });
-        Actions.undo.onNext(this.state.history.last());
+        Actions.undo(this.state.history.last());
     };
 
     redo = (e) => {
@@ -59,7 +59,7 @@ export default class extends Component {
             history: this.state.history.push(this.state.person),
             future: this.state.future.pop()
         });
-        Actions.redo.onNext(this.state.future.last());
+        Actions.redo(this.state.future.last());
     };
 
     handleChange = (e) => {
@@ -73,13 +73,13 @@ export default class extends Component {
 
         switch(name) {
             case 'firstName':
-                Actions.changeFirstName.onNext(value);
+                Actions.changeFirstName(value);
                 break;
             case 'lastName':
-                Actions.changeLastName.onNext(value);
+                Actions.changeLastName(value);
                 break;
             case 'countryName':
-                Actions.changeCountry.onNext(value);
+                Actions.changeCountry(value);
                 break;
             case 'friend':
                 this.setState({friend: value});
@@ -92,7 +92,7 @@ export default class extends Component {
             history: this.state.history.push(this.state.person)
         });
 
-        Actions.addFriend.onNext(this.state.friend);
+        Actions.addFriend(this.state.friend);
         this.setState({friend: ""});
     };
 
@@ -100,7 +100,7 @@ export default class extends Component {
         this.setState({
             history: this.state.history.push(this.state.person)
         });
-        Actions.removeFriend.onNext(friendIndex)
+        Actions.removeFriend(friendIndex)
     };
 
     render() {

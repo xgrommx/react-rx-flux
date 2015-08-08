@@ -2,7 +2,7 @@ var path = require('path');
 var webpack = require('webpack');
 
 module.exports = {
-    cache: true,
+    cache: false,
     target: 'web',
     debug: true,
     watch: true,

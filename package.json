@@ -16,14 +16,13 @@
     "webpack-dev-server": "^1.9.0"
   },
   "dependencies": {
-    "falcor": "0.0.0",
+    "flyd": "^0.1.14",
+    "flyd-flatmap": "^1.0.2",
+    "flyd-scanmerge": "0.0.3",
     "immutable": "^3.7.3",
-    "lodash": "^3.10.0",
-    "lodash-fp": "^0.10.1",
     "ramda": "^0.14.0",
     "react": "^0.13.3",
     "react-loader": "^1.4.0",
-    "react-router": "^0.13.3",
-    "rx": "^2.5.3"
+    "react-router": "^0.13.3"
   }
 }
