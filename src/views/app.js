@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
-import {RouteHandler, Link} from 'react-router';
+import {Link} from 'react-router';
+
+//<li><Link to="/inbox">Inbox</Link></li>
+//<li><Link to="/about">About</Link></li>
 
 export default class extends Component {
     constructor() {
@@ -16,15 +19,13 @@ export default class extends Component {
                         </div>
                         <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                             <ul className="nav navbar-nav">
-                                <li><Link to="home">Home</Link></li>
-                                <li><Link to="person">Person</Link></li>
-                                <li><Link to="inbox">Inbox</Link></li>
-                                <li><Link to="about">About</Link></li>
+                                <li><Link to="/home">Home</Link></li>
+                                <li><Link to="/person">Person</Link></li>
                             </ul>
                         </div>
                     </div>
                 </nav>
-                <RouteHandler/>
+                {this.props.children}
             </div>
         );
     }

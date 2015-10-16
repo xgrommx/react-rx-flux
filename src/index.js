@@ -1,4 +1,6 @@
 import React from 'react';
+import {render} from 'react-dom';
+import { createHistory, useBasename } from 'history'
 
 import Person from './views/main';
 import About from './views/about';
@@ -8,19 +10,20 @@ import App from './views/app';
 
 import Store from './store';
 
-import Router, {Route, DefaultRoute} from 'react-router';
+import {Router, Route, IndexRoute} from 'react-router';
+
+//<Route path="about" component={About}/>
+//<Route path="inbox" component={Inbox}/>
 
 const routes = (
-    <Route name="app" path="/" handler={App}>
-        <Route name="home" path="home" handler={Home}/>
-        <Route name="about" path="about" handler={About}/>
-        <Route name="inbox" path="inbox" handler={Inbox}/>
-        <Route name="person" path="person" handler={Person}/>
-        <DefaultRoute handler={Home}/>
-    </Route>
+    <Router history={createHistory()}>
+        <Route path="/" component={App}>
+            <Route path="home" component={Home}/>
+            <Route path="person" component={Person}/>
+            <IndexRoute component={Home}/>
+        </Route>
+    </Router>
 );
 
-Router.run(routes, function(Handler, route) {
-    console.log(route.routes[1].name);
-    React.render(<Handler/>, document.body);
-});
+
+render(routes, document.getElementById('app'));

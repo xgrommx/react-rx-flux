@@ -9,21 +9,24 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "babel-core": "^5.5.4",
-    "babel-loader": "^5.1.4",
-    "react-hot-loader": "^1.2.7",
-    "webpack": "^1.9.10",
-    "webpack-dev-server": "^1.9.0"
+    "babel-core": "latest",
+    "babel-loader": "latest",
+    "component-inspector": "^1.2.0",
+    "react-hot-loader": "latest",
+    "webpack": "latest",
+    "webpack-dev-server": "latest"
   },
   "dependencies": {
-    "falcor": "0.0.0",
-    "immutable": "^3.7.3",
-    "lodash": "^3.10.0",
-    "lodash-fp": "^0.10.1",
-    "ramda": "^0.14.0",
-    "react": "^0.13.3",
-    "react-loader": "^1.4.0",
-    "react-router": "^0.13.3",
-    "rx": "^2.5.3"
+    "falcor": "latest",
+    "history": "^1.12.5",
+    "immutable": "latest",
+    "lodash": "latest",
+    "lodash-fp": "latest",
+    "ramda": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "react-loader": "latest",
+    "react-router": "latest",
+    "rx": "latest"
   }
 }
