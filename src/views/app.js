@@ -1,9 +1,6 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router';
 
-//<li><Link to="/inbox">Inbox</Link></li>
-//<li><Link to="/about">About</Link></li>
-
 export default class extends Component {
     constructor() {
         super(arguments);
@@ -21,6 +18,8 @@ export default class extends Component {
                             <ul className="nav navbar-nav">
                                 <li><Link to="/home">Home</Link></li>
                                 <li><Link to="/person">Person</Link></li>
+                                <li><Link to="/inbox">Inbox</Link></li>
+                                <li><Link to="/about">About</Link></li>
                             </ul>
                         </div>
                     </div>

@@ -12,14 +12,13 @@ import Store from './store';
 
 import {Router, Route, IndexRoute} from 'react-router';
 
-//<Route path="about" component={About}/>
-//<Route path="inbox" component={Inbox}/>
-
 const routes = (
     <Router history={createHistory()}>
         <Route path="/" component={App}>
             <Route path="home" component={Home}/>
             <Route path="person" component={Person}/>
+            <Route path="about" component={About}/>
+            <Route path="inbox" component={Inbox}/>
             <IndexRoute component={Home}/>
         </Route>
     </Router>

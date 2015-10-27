@@ -1,7 +1,6 @@
 import {CompositeDisposable} from 'rx';
 import I, {Map, List} from 'immutable';
 import React, {Component, PropTypes} from 'react';
-import R from 'ramda';
 import Loader from 'react-loader';
 import Actions from '../actions';
 import Store from '../store';

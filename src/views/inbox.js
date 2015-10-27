@@ -1,11 +1,3 @@
-import React, {Component} from 'react';
+import React from 'react';
 
-export default class extends Component {
-    constructor() {
-        super(arguments);
-    }
-
-    render() {
-        return <h2>Inbox</h2>;
-    }
-}
+export default () => (<h2>Inbox</h2>);

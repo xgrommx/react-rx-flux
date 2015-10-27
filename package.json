@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "falcor": "latest",
-    "history": "^1.12.5",
+    "history": "latest",
     "immutable": "latest",
     "lodash": "latest",
     "lodash-fp": "latest",

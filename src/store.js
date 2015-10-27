@@ -8,7 +8,7 @@ let defaultPerson = {
     country: {
         name: 'UA'
     },
-    friends: []
+    friends: ['Alex']
 };
 
 const emulateAjaxWithDelay = (key) => new Promise(resolve =>
